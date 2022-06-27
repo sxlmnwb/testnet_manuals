@@ -1,7 +1,7 @@
 # Client
 
 <p align="center">
-  <img height="125" height="auto" src="https://raw.githubusercontent.com/sxlmnwb/testnet_manuals/master/Sei_Network/node_port/asset/client.PNG">
+  <img height="125" height="auto" src="https://raw.githubusercontent.com/sxlmnwb/testnet_manuals/master/sei_network/node_port/asset/client.PNG">
 </p>
 
 Change port client to "26657"
@@ -12,7 +12,7 @@ nano .sei/config/client.toml
 # Config
 
 <p align="center">
-  <img height="125" height="auto" src="https://raw.githubusercontent.com/sxlmnwb/testnet_manuals/master/Sei_Network/node_port/asset/config.png">
+  <img height="125" height="auto" src="https://raw.githubusercontent.com/sxlmnwb/testnet_manuals/master/sei_network/node_port/asset/config.png">
 </p>
 
 Change port config to "26657"
@@ -32,7 +32,7 @@ sudo journalctl -fu seid -o cat
 # Result
 
 <p align="center">
-  <img height="auto" height="auto" src="https://raw.githubusercontent.com/sxlmnwb/testnet_manuals/master/Sei_Network/node_port/asset/result.PNG">
+  <img height="auto" height="auto" src="https://raw.githubusercontent.com/sxlmnwb/testnet_manuals/master/sei_network/node_port/asset/result.PNG">
 </p>
 
 If the result is like this, it means that the port you changed is running
