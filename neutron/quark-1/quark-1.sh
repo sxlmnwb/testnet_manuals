@@ -12,7 +12,7 @@ echo "▒ ▒▓▒ ▒ ░▒▒ ░ ░▓ ░░ ▒░▓  ░░ ▒░   �
 echo "░ ░▒  ░ ░░░   ░▒ ░░ ░ ▒  ░░  ░      ░░ ░░   ░ ▒░  ▒ ░ ░   ░    ░ ";
 echo "░  ░  ░   ░    ░    ░ ░   ░      ░      ░   ░ ░   ░   ░ ░        ";
 echo "      ░   ░    ░      ░  ░       ░            ░     ░          ░ ";
-echo "              Auto Installer quark-1 For NEUTRON                 ";
+echo "            Auto Installer quark-1 For NEUTRON v0.1.1            ";
 echo -e "\e[0m"
 sleep 1
 
@@ -27,7 +27,7 @@ echo -e "YOUR NODE NAME : \e[1m\e[31m$NODENAME\e[0m"
 sudo apt-get update && sudo apt-get upgrade -y
 
 # Package
-apt-get install curl build-essential git wget jq make gcc rustc cargo tmux unzip -y
+sudo apt-get install curl build-essential git wget jq make gcc rustc cargo tmux unzip -y
 
 # Install GO
 ver="1.18.2"
