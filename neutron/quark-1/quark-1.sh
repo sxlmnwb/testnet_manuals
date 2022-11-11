@@ -14,7 +14,7 @@ echo "░  ░  ░   ░    ░    ░ ░   ░      ░      ░   ░ ░   
 echo "      ░   ░    ░      ░  ░       ░            ░     ░          ░ ";
 echo "              Auto Installer quark-1 For NEUTRON                 ";
 echo -e "\e[0m"
-sleep 2
+sleep 1
 
 # Set Vars
 if [ ! $NODENAME ]; then
@@ -40,19 +40,20 @@ echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bash_profile
 source ~/.bash_profile
 go version
 
-# install Hermes IBC Relayer
-cargo install --version 0.14.1 ibc-relayer-cli --bin hermes --locked
-
 # Get testnet version of neutron
 git clone -b v0.1.1 https://github.com/neutron-org/neutron.git
 cd neutron
 make install
+sudo mv $HOME/go/bin/neutrond /usr/local/bin/
+sudo chmod 775 /usr/local/bin/neutrond
 
 # Neutrond version
 neutrond version --long
 
 # GenTx generation
-neutrond init $NODENAME --chain-id quark-1
+neutrond config chain-id quark-1
+neutrond config keyring-backend file
+neutrond init "$NODENAME" --chain-id quark-1
 
 # Genesis File
 curl -s https://raw.githubusercontent.com/neutron-org/testnets/main/quark/genesis.json > ~/.neutrond/config/genesis.json
@@ -79,8 +80,8 @@ Description=Neutrond daemon
 After=network-online.target
 
 [Service]
-User=$NODENAME
-ExecStart=$HOME/go/bin/neutrond start
+User=$USER
+ExecStart=$(which neutrond) start
 Restart=on-failure
 RestartSec=3
 LimitNOFILE=4096
@@ -93,9 +94,9 @@ EOF
 sudo systemctl daemon-reload
 sudo systemctl enable neutrond
 sudo systemctl start neutrond
-sudo systemctl restart neutrond
 
 echo -e "\e[1m\e[31mSETUP FINISHED\e[0m";
 echo ""
 echo -e "Check Running Logs: \e[1m\e[31mjournalctl -u neutrond -f -o cat\e[0m"
+echo ""
 # End
