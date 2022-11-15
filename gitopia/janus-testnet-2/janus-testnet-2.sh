@@ -24,7 +24,7 @@ TLORE_FOLDER=.gitopia
 TLORE_VER=v1.2.0
 TLORE_REPO=gitopia://gitopia/gitopia
 TLORE_GENESIS=https://server.gitopia.com/raw/gitopia/testnets/master/gitopia-janus-testnet-2/genesis.json.gz
-TLORE_ADDRBOOK=http://65.108.6.45:8000/gitopia/addrbook.json
+TLORE_ADDRBOOK=https://snapshots.kjnodes.com/gitopia-testnet/addrbook.json
 TLORE_DENOM=utlore
 TLORE_PORT=41
 
@@ -115,8 +115,6 @@ sed -i -e "s/^pruning *=.*/pruning = \"$pruning\"/" $HOME/$TLORE_FOLDER/config/a
 sed -i -e "s/^pruning-keep-recent *=.*/pruning-keep-recent = \"$pruning_keep_recent\"/" $HOME/$TLORE_FOLDER/config/app.toml
 sed -i -e "s/^pruning-keep-every *=.*/pruning-keep-every = \"$pruning_keep_every\"/" $HOME/$TLORE_FOLDER/config/app.toml
 sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"$pruning_interval\"/" $HOME/$TLORE_FOLDER/config/app.toml
-indexer="null" && \
-sed -i -e "s/^indexer *=.*/indexer = \"$indexer\"/" $HOME/$TLORE_FOLDER/config/config.toml
 $TLORE tendermint unsafe-reset-all --home $HOME/$TLORE_FOLDER
 
 # Create Service
