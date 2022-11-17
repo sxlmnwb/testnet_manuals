@@ -127,6 +127,8 @@ sudo systemctl daemon-reload
 sudo systemctl enable $LYL
 sudo systemctl restart $LYL
 
+echo -e "\e[1m\e[31mThanks to NODEIST for the original script...\e[0m"
+echo ""
 echo -e "\e[1m\e[31mSETUP FINISHED\e[0m";
 echo ""
 echo -e "Check Running Logs: \e[1m\e[31mjournalctl -fu loyald -o cat\e[0m"
