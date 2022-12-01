@@ -11,7 +11,7 @@ if [ $(/usr/bin/id -u) -ne 0 ]; then
 exit 1
 fi
 
-v=0.12.0
+v=0.13.0
 
 echo "  ██████ ▒██   ██▒ ██▓     ███▄ ▄███▓ ███▄    █  █     █░▓█████▄ ";
 echo "▒██    ▒ ▒▒ █ █ ▒░▓██▒    ▓██▒▀█▀ ██▒ ██ ▀█   █ ▓█░ █ ░█▒██▒ ▄██░";
@@ -45,4 +45,6 @@ wget -q "https://github.com/dusk-network/wallet-cli/releases/download/v$v/ruskwa
 tar -xf "ruskwallet$v-linux-x64.tar.gz"
 rm -rf "ruskwallet$v-linux-x64.tar.gz"
 cd "rusk-wallet$v-linux-x64"
-./rusk-wallet
+
+# Start
+./rusk-wallet --state http://127.0.0.1:8585
