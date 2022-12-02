@@ -1,14 +1,19 @@
-sudo systemctl stop celestia-appd
+#
+# // Copyright (C) 2022 Salman Wahib (sxlmnwb)
+#
 
-cp $HOME/.celestia-app/data/priv_validator_state.json $HOME/.celestia-app/priv_validator_state.json.backup
-celestia-appd tendermint unsafe-reset-all --home $HOME/.celestia-app --keep-addr-book
+systemctl stop celestia-appd
+celestia-appd tendermint unsafe-reset-all --home $HOME/.celestia-app
+cd $HOME
+rm -rf ~/.celestia-app/data
+mkdir -p ~/.celestia-app/data
+SNAP_NAME=$(curl -s https://snaps.qubelabs.io/celestia/ | egrep -o ">mamaki.*tar" | tr -d ">")
+wget -O - https://snaps.qubelabs.io/celestia/${SNAP_NAME} | tar xf - -C ~/.celestia-app/data/
+systemctl restart celestia-appd 
 
-rm -rf $HOME/.celestia-app/data 
+echo -e "\e[1m\e[31mSETUP FINISHED\e[0m"
+echo ""
+echo -e "CHECK RUNNING LOGS : \e[1m\e[31mjournalctl -fu celestia-appd -o cat\e[0m"
+echo ""
 
-SNAP_NAME=$(curl -s https://snapshots3-testnet.nodejumper.io/celestia-testnet/ | egrep -o ">mamaki.*\.tar.lz4" | tr -d ">")
-curl https://snapshots3-testnet.nodejumper.io/celestia-testnet/${SNAP_NAME} | lz4 -dc - | tar -xf - -C $HOME/.celestia-app
-
-mv $HOME/.celestia-app/priv_validator_state.json.backup $HOME/.celestia-app/data/priv_validator_state.json
-
-sudo systemctl restart celestia-appd
-sudo journalctl -u celestia-appd -f --no-hostname -o cat
+# End
