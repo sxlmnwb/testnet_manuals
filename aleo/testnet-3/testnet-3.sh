@@ -25,23 +25,10 @@ echo ""
 sleep 1
 
 # Package
-cd /root
-apt-get update && sudo apt-get upgrade -y
-apt-get install \
-    build-essential \
-    curl \
-    clang \
-    gcc \
-    libssl-dev \
-    llvm \
-    make \
-    pkg-config \
-    tmux \
-    xz-utils \
-    ufw \
-    cargo \
-    rustc \
-    git -y
+cd $HOME
+apt-get update
+apt-get upgrade -y
+apt-get install build-essential curl clang gcc libssl-dev llvm make pkg-config tmux xz-utils pkg-config ufw cargo -y
 
 # Enable ufw
 echo ""
