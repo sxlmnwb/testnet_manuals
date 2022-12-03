@@ -57,7 +57,7 @@ ufw allow 3033/tcp
 git clone https://github.com/AleoHQ/snarkOS.git --depth 1
 
 # Install snarkOS
-cd /root/snarkOS
+cd snarkOS
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 source "/root/.cargo/env"
 cargo install cargo --force
