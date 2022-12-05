@@ -108,6 +108,15 @@ sed -i.bak -e "s/^mode *=.*/mode = \"validator\"/" $HOME/.celestia-app/config/co
 # Reset network
 $TIA tendermint unsafe-reset-all --home $HOME/.celestia-app
 
+# Enable snapshot
+cd $HOME
+rm -rf ~/.celestia-app/data
+mkdir -p ~/.celestia-app/data
+SNAP_NAME=$(curl -s https://snaps.qubelabs.io/celestia/ | \
+    egrep -o ">mamaki.*tar" | tr -d ">")
+wget -O - https://snaps.qubelabs.io/celestia/${SNAP_NAME} | tar xf - \
+    -C ~/.celestia-app/data/
+
 # Create Service
 sudo tee /etc/systemd/system/$TIA.service > /dev/null <<EOF
 [Unit]
