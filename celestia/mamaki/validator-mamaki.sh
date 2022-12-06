@@ -82,6 +82,7 @@ rm -rf networks
 git clone $TIA_REPO_NETWORK
 
 # Init generation
+$TIA config keyring-backend test
 $TIA init $TIA_NODENAME --chain-id $TIA_ID
 
 # Download genesis and addrbook
