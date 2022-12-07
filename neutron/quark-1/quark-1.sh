@@ -98,6 +98,7 @@ sudo systemctl enable neutrond
 sudo systemctl start neutrond
 
 echo -e "\e[1m\e[31mSETUP FINISHED\e[0m";
+echo -e "\e[1m\e[31mSpecial Thanks Nodeist for Original Script <3\e[0m"
 echo ""
 echo -e "Check Running Logs: \e[1m\e[31mjournalctl -u neutrond -f -o cat\e[0m"
 echo ""
