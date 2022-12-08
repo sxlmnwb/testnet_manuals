@@ -1,5 +1,6 @@
-# Installing TESTNET-3 testnet for ALEO
-To installing TESTNET-3 testnet for ALEO you can run command below on fresh server, You need privilege access root.
+# Auto installer testnet-3 for ALEO
+Source :
 ```
-wget https://raw.githubusercontent.com/sxlmnwb/testnet_manuals/master/aleo/testnet-3/testnet-3.sh && chmod +x testnet-3.sh && bash testnet-3.sh
+haruka.sh   : https://github.com/HarukaMa/aleo-prover
+official.sh : https://github.com/AleoHQ/snarkOS
 ```
