@@ -38,6 +38,8 @@ git clone https://github.com/HarukaMa/aleo-prover -b testnet3-new
 
 # Build Prover
 cd aleo-prover
-cargo build --release
+source "/root/.cargo/env"
+cargo install cargo --force
+cargo install --path .
 
 # End
