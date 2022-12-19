@@ -35,7 +35,7 @@ echo "export HEART_FOLDER=${HEART_FOLDER}" >> $HOME/.bash_profile
 echo "export HEART_VER=${HEART_VER}" >> $HOME/.bash_profile
 echo "export HEART_REPO=${HEART_REPO}" >> $HOME/.bash_profile
 echo "export HEART_GENESIS=${HEART_GENESIS}" >> $HOME/.bash_profile
-#echo "export HEART_ADDRBOOK=${HEART_ADDRBOOK}" >> $HOME/.bash_profile
+echo "export HEART_ADDRBOOK=${HEART_ADDRBOOK}" >> $HOME/.bash_profile
 echo "export HEART_DENOM=${HEART_DENOM}" >> $HOME/.bash_profile
 echo "export HEART_PORT=${HEART_PORT}" >> $HOME/.bash_profile
 source $HOME/.bash_profile
