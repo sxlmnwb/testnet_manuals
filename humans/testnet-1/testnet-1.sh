@@ -81,7 +81,7 @@ sudo mv $HEART /usr/bin/
 # Init generation
 $HEART config chain-id $HEART_ID
 $HEART config keyring-backend test
-$HEART config node tcp://localhost:${QCK_PORT}657
+$HEART config node tcp://localhost:${HEART_PORT}657
 $HEART init $HEART_NODENAME --chain-id $HEART_ID
 
 # Download genesis and addrbook
