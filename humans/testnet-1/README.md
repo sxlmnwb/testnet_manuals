@@ -3,8 +3,3 @@ To installing TESTNET-1 testnet for HUMANS AI you can run command below on fresh
 ```
 wget https://raw.githubusercontent.com/sxlmnwb/testnet_manuals/master/humans/testnet-1/testnet-1.sh && chmod +x testnet-1.sh && ./testnet-1.sh
 ```
-# Installing STATE SYNC TESTNET-1 for HUMANS AI
-If you are having problems of reconnect peer try state sync.
-```
-wget https://raw.githubusercontent.com/sxlmnwb/testnet_manuals/master/humans/testnet-1/statesync.sh && chmod +x statesync.sh && ./statesync.sh
-```
