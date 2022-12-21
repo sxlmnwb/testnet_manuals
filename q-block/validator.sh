@@ -43,6 +43,7 @@ if [ ! $PASSWORD ]; then
     echo ""
 	read -p "[TYPE YOUR PASSWORD] > " PASSWORD
 	echo $PASSWORD >> keystore/pwd.txt
+fi
 
 docker run --entrypoint="" --rm -v $PWD:/data -it qblockchain/q-client:testnet geth account new --datadir=/data --password=/data/keystore/pwd.txt
 
