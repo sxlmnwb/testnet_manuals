@@ -23,6 +23,8 @@ NOLUS_ID=nolus-rila
 NOLUS_FOLDER=.nolus
 NOLUS_VER=v0.1.39
 NOLUS_REPO=https://github.com/Nolus-Protocol/nolus-core
+NOLUS_GENESIS=https://snapshots.kjnodes.com/nolus-testnet/genesis.json
+NOLUS_ADDRBOOK=https://snapshots.kjnodes.com/nolus-testnet/addrbook.json
 NOLUS_DENOM=unls
 NOLUS_PORT=13
 
@@ -32,14 +34,16 @@ echo "export NOLUS_ID=${NOLUS_ID}" >> $HOME/.bash_profile
 echo "export NOLUS_FOLDER=${NOLUS_FOLDER}" >> $HOME/.bash_profile
 echo "export NOLUS_VER=${NOLUS_VER}" >> $HOME/.bash_profile
 echo "export NOLUS_REPO=${NOLUS_REPO}" >> $HOME/.bash_profile
+echo "export NOLUS_GENESIS=${NOLUS_GENESIS}" >> $HOME/.bash_profile
+echo "export NOLUS_ADDRBOOK=${NOLUS_ADDRBOOK}" >> $HOME/.bash_profile
 echo "export NOLUS_DENOM=${NOLUS_DENOM}" >> $HOME/.bash_profile
 echo "export NOLUS_PORT=${NOLUS_PORT}" >> $HOME/.bash_profile
 source $HOME/.bash_profile
 
 # Set Vars
 if [ ! $NOLUS_NODENAME ]; then
-	read -p "sxlzptprjkt@w00t666w00t:~# [ENTER YOUR NODE] > " NOLUS_NODENAME
-	echo 'export NOLUS_NODENAME='$NOLUS_NODENAME >> $HOME/.bash_profile
+        read -p "sxlzptprjkt@w00t666w00t:~# [ENTER YOUR NODE] > " NOLUS_NODENAME
+        echo 'export NOLUS_NODENAME='$NOLUS_NODENAME >> $HOME/.bash_profile
 fi
 echo ""
 echo -e "YOUR NODE NAME : \e[1m\e[31m$NOLUS_NODENAME\e[0m"
@@ -80,12 +84,12 @@ $NOLUS config keyring-backend test
 $NOLUS config node tcp://localhost:${NOLUS_PORT}657
 $NOLUS init $NOLUS_NODENAME --chain-id $NOLUS_ID
 
-# Set peers and seeds
-PEERS="1a0bb6c35e2663202535d4b849ff06250762d299@rpc.nolus.ppnv.space:35656"
-sed -i.bak -e "s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/;" $HOME/$NOLUS_FOLDER/config/config.toml
+# Download genesis and addrbook
+curl -Ls $NOLUS_GENESIS > $HOME/$NOLUS_FOLDER/config/genesis.json
+curl -Ls $NOLUS_ADDRBOOK > $HOME/$NOLUS_FOLDER/config/addrbook.json
 
-# Create file genesis.json
-touch $HOME/$NOLUS_FOLDER/config/genesis.json
+# Add seeds
+sed -i -e "s|^seeds *=.*|seeds = \"3f472746f46493309650e5a033076689996c8881@nolus-testnet.rpc.kjnodes.com:43659\"|" $HOME/$NOLUS_FOLDER/config/config.toml
 
 # Set Port
 sed -i.bak -e "s%^proxy_app = \"tcp://127.0.0.1:26658\"%proxy_app = \"tcp://127.0.0.1:${NOLUS_PORT}658\"%; s%^laddr = \"tcp://127.0.0.1:26657\"%laddr = \"tcp://127.0.0.1:${NOLUS_PORT}657\"%; s%^pprof_laddr = \"localhost:6060\"%pprof_laddr = \"localhost:${NOLUS_PORT}060\"%; s%^laddr = \"tcp://0.0.0.0:26656\"%laddr = \"tcp://0.0.0.0:${NOLUS_PORT}656\"%; s%^prometheus_listen_addr = \":26660\"%prometheus_listen_addr = \":${NOLUS_PORT}660\"%" $HOME/$NOLUS_FOLDER/config/config.toml
@@ -95,7 +99,7 @@ sed -i.bak -e "s%^address = \"tcp://0.0.0.0:1317\"%address = \"tcp://0.0.0.0:${N
 pruning="custom"
 pruning_keep_recent="100"
 pruning_keep_every="0"
-pruning_interval="50"
+pruning_interval="19"
 sed -i -e "s/^pruning *=.*/pruning = \"$pruning\"/" $HOME/$NOLUS_FOLDER/config/app.toml
 sed -i -e "s/^pruning-keep-recent *=.*/pruning-keep-recent = \"$pruning_keep_recent\"/" $HOME/$NOLUS_FOLDER/config/app.toml
 sed -i -e "s/^pruning-keep-every *=.*/pruning-keep-every = \"$pruning_keep_every\"/" $HOME/$NOLUS_FOLDER/config/app.toml
@@ -104,28 +108,13 @@ sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"$pruning_interval\"/" $
 # Set minimum gas price
 sed -i -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0.0025$NOLUS_DENOM\"/" $HOME/$NOLUS_FOLDER/config/app.toml
 
-# Set config snapshot
-sed -i -e "s/^snapshot-interval *=.*/snapshot-interval = \"1000\"/" $HOME/$NOLUS_FOLDER/config/app.toml
-sed -i -e "s/^snapshot-keep-recent *=.*/snapshot-keep-recent = \"2\"/" $HOME/$NOLUS_FOLDER/config/app.toml
+# Set indexer
+indexer="null" && \
+sed -i -e "s/^indexer *=.*/indexer = \"$indexer\"/" $HOME/$NOLUS_FOLDER/config/config.toml
 
-# Reset network
-$NOLUS tendermint unsafe-reset-all --home $HOME/$NOLUS_FOLDER
-
-# Enable state sync
-SNAP_RPC="http://rpc.nolus.ppnv.space:34657"
-
-LATEST_HEIGHT=$(curl -s $SNAP_RPC/block | jq -r .result.block.header.height); \
-BLOCK_HEIGHT=$((LATEST_HEIGHT - 2000)); \
-TRUST_HASH=$(curl -s "$SNAP_RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
-
-echo ""
-echo -e "\e[1m\e[31m[!]\e[0m HEIGHT : \e[1m\e[31m$LATEST_HEIGHT\e[0m BLOCK : \e[1m\e[31m$BLOCK_HEIGHT\e[0m HASH : \e[1m\e[31m$TRUST_HASH\e[0m"
-echo ""
-
-sed -i.bak -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\1true| ; \
-s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC,$SNAP_RPC\"| ; \
-s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
-s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"|" $HOME/$NOLUS_FOLDER/config/config.toml
+# Enable snapshots
+rm -rf $HOME/$NOLUS_FOLDER/data
+curl -L https://snapshots.kjnodes.com/nolus-testnet/snapshot_latest.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/$NOLUS_FOLDER
 
 # Create Service
 sudo tee /etc/systemd/system/$NOLUS.service > /dev/null <<EOF
