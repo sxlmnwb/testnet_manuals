@@ -22,9 +22,9 @@ LAVA=lavad
 LAVA_ID=lava-testnet-1
 LAVA_FOLDER=.lava
 LAVA_VER=v0.4.0
-LAVA_REPO=https://github.com/lavanet/lava
+LAVA_BINARY=https://lava-binary-upgrades.s3.amazonaws.com/testnet
 LAVA_GENESIS=https://raw.githubusercontent.com/K433QLtr6RA9ExEq/GHFkqmTzpdNLDd6T/main/testnet-1/genesis_json/genesis.json
-#LAVA_ADDRBOOK=
+LAVA_ADDRBOOK=https://snapshots1-testnet.nodejumper.io/lava-testnet/addrbook.json
 LAVA_DENOM=ulava
 LAVA_PORT=15
 
@@ -35,7 +35,7 @@ echo "export LAVA_FOLDER=${LAVA_FOLDER}" >> $HOME/.bash_profile
 echo "export LAVA_VER=${LAVA_VER}" >> $HOME/.bash_profile
 echo "export LAVA_REPO=${LAVA_REPO}" >> $HOME/.bash_profile
 echo "export LAVA_GENESIS=${LAVA_GENESIS}" >> $HOME/.bash_profile
-#echo "export LAVA_ADDRBOOK=${LAVA_ADDRBOOK}" >> $HOME/.bash_profile
+echo "export LAVA_ADDRBOOK=${LAVA_ADDRBOOK}" >> $HOME/.bash_profile
 echo "export LAVA_DENOM=${LAVA_DENOM}" >> $HOME/.bash_profile
 echo "export LAVA_PORT=${LAVA_PORT}" >> $HOME/.bash_profile
 source $HOME/.bash_profile
@@ -55,28 +55,13 @@ echo ""
 sudo apt update && sudo apt upgrade -y
 
 # Package
-sudo apt install curl git jq lz4 build-essential -y
+sudo apt install curl jq lz4 build-essential -y
 
-# Install GO
-ver="1.18.2"
+# Get testnet version of lava
 cd $HOME
-rm -rf go
-wget "https://golang.org/dl/go$ver.linux-amd64.tar.gz"
-sudo rm -rf /usr/local/go
-sudo tar -C /usr/local -xzf "go$ver.linux-amd64.tar.gz"
-rm "go$ver.linux-amd64.tar.gz"
-echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bash_profile
-source ~/.bash_profile
-go version
-
-# Get testnet version of mis
-cd $HOME
-rm -rf lava
-git clone $LAVA_REPO
-cd lava
-git checkout $LAVA_VER
-make build
-sudo mv $HOME/lava/build/$LAVA /usr/bin/
+curl -L $LAVA_BINARY/$LAVA_VER/$LAVA > $LAVA
+chmod +x $LAVA
+sudo mv $LAVA /usr/bin/
 
 # Init generation
 $LAVA config chain-id $LAVA_ID
@@ -85,8 +70,8 @@ $LAVA config node tcp://localhost:${LAVA_PORT}657
 $LAVA init $LAVA_NODENAME --chain-id $LAVA_ID
 
 # Download genesis and addrbook
-wget $LAVA_GENESIS -O $HOME/$LAVA_FOLDER/config/genesis.json
-#wget $LAVA_ADDRBOOK -O $HOME/$LAVA_FOLDER/config/addrbook.json
+curl -Ls $LAVA_GENESIS > $HOME/$LAVA_FOLDER/config/genesis.json
+curl -Ls $LAVA_ADDRBOOK > $HOME/$LAVA_FOLDER/config/addrbook.json
 
 # Set peers and seeds
 SEEDS="3a445bfdbe2d0c8ee82461633aa3af31bc2b4dc0@prod-pnet-seed-node.lavanet.xyz:26656,e593c7a9ca61f5616119d6beb5bd8ef5dd28d62d@prod-pnet-seed-node2.lavanet.xyz:26656"
@@ -107,11 +92,16 @@ sed -i -e "s/^pruning-keep-every *=.*/pruning-keep-every = \"$pruning_keep_every
 sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"$pruning_interval\"/" $HOME/$LAVA_FOLDER/config/app.toml
 
 # Set minimum gas price
-sed -i -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0.05$LAVA_DENOM\"/" $HOME/$LAVA_FOLDER/config/app.toml
+sed -i -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0.025$LAVA_DENOM\"/" $HOME/$LAVA_FOLDER/config/app.toml
 
-# Set indexer
-indexer="null" && \
-sed -i -e "s/^indexer *=.*/indexer = \"$indexer\"/" $HOME/$LAVA_FOLDER/config/config.toml
+# Enable prometheus
+sed -i -e "s/prometheus = false/prometheus = true/" $HOME/$LAVA_FOLDER/config/config.toml
+
+# Enable snapshots
+sed -i -e "s/^snapshot-interval *=.*/snapshot-interval = \"2000\"/" $LAVA_FOLDER/config/app.toml
+$LAVA tendermint unsafe-reset-all --home $HOME/$LAVA_FOLDER --keep-addr-book
+SNAP_NAME=$(curl -s https://snapshots1-testnet.nodejumper.io/lava-testnet/ | egrep -o ">lava-testnet-1.*\.tar.lz4" | tr -d ">")
+curl https://snapshots1-testnet.nodejumper.io/lava-testnet/${SNAP_NAME} | lz4 -dc - | tar -xf - -C $HOME/$LAVA_FOLDER
 
 # Create Service
 sudo tee /etc/systemd/system/$LAVA.service > /dev/null <<EOF
