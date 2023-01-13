@@ -118,7 +118,7 @@ sed -i -e "s/^indexer *=.*/indexer = \"$indexer\"/" $HOME/$TIA_FOLDER/config/con
 cd $HOME
 rm -rf ~/$TIA_FOLDER/data
 mkdir -p ~/$TIA_FOLDER/data
-curl -o - -L https://snapshots.polkachu.com/testnet-snapshots/celestia/celestia_172276.tar.lz4 | lz4 -c -d - | tar -x -C $HOME/$TIA_FOLDER
+curl -L https://snapshots.kjnodes.com/celestia-testnet/snapshot_latest.tar.lz4 | tar -Ilz4 -xf - -C $HOME/$TIA_FOLDER
 
 # Create Service
 sudo tee /etc/systemd/system/$TIA.service > /dev/null <<EOF
