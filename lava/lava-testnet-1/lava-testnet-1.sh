@@ -61,7 +61,7 @@ sudo apt install curl jq lz4 build-essential -y
 cd $HOME
 curl -L $LAVA_BINARY/$LAVA_VER/$LAVA > $LAVA
 chmod +x $LAVA
-sudo mv $LAVA /usr/bin/
+sudo mv $LAVA /usr/local/bin/
 
 # Init generation
 $LAVA config chain-id $LAVA_ID
