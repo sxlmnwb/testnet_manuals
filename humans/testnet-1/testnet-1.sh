@@ -120,10 +120,6 @@ sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"$pruning_interval\"/" $
 # Set minimum gas price
 sed -i -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0.01$HEART_DENOM\"/" $HOME/$HEART_FOLDER/config/app.toml
 
-# Set indexer
-indexer="null" && \
-sed -i -e "s/^indexer *=.*/indexer = \"$indexer\"/" $HOME/$HEART_FOLDER/config/config.toml
-
 # Enable snapshots
 rm -rf $HOME/$HEART_FOLDER/data
 curl -L https://snapshots.polkachu.com/testnet-snapshots/humans/humans_478320.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/$HEART_FOLDER
