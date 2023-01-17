@@ -108,10 +108,6 @@ sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"$pruning_interval\"/" $
 # Set minimum gas price
 sed -i -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0.0025$NOLUS_DENOM\"/" $HOME/$NOLUS_FOLDER/config/app.toml
 
-# Set indexer
-indexer="null" && \
-sed -i -e "s/^indexer *=.*/indexer = \"$indexer\"/" $HOME/$NOLUS_FOLDER/config/config.toml
-
 # Enable snapshots
 rm -rf $HOME/$NOLUS_FOLDER/data
 curl -L https://snapshots.kjnodes.com/nolus-testnet/snapshot_latest.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/$NOLUS_FOLDER
