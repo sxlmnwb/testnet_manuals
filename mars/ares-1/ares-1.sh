@@ -149,6 +149,9 @@ s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC,$SNAP_RPC\"| ; \
 s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
 s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"|" $HOME/$MARS_FOLDER/config/config.toml
 
+# Enable wasm
+curl -o - -L https://anode.team/Mars/test/anode.team_mars_wasm.tar.lz4 | lz4 -c -d - | tar -x -C $HOME/$MARS_FOLDER/data
+
 # Start Service
 sudo systemctl start $MARS
 
