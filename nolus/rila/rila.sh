@@ -12,7 +12,7 @@ echo "▒ ▒▓▒ ▒ ░▒▒ ░ ░▓ ░░ ▒░▓  ░░ ▒░   �
 echo "░ ░▒  ░ ░░░   ░▒ ░░ ░ ▒  ░░  ░      ░░ ░░   ░ ▒░  ▒ ░ ░   ░    ░ ";
 echo "░  ░  ░   ░    ░    ░ ░   ░      ░      ░   ░ ░   ░   ░ ░        ";
 echo "      ░   ░    ░      ░  ░       ░            ░     ░          ░ ";
-echo "           Auto Installer nolus-rila For NOLUS v0.1.39           ";
+echo "           Auto Installer nolus-rila For NOLUS v0.1.43           ";
 echo -e "\e[0m"
 sleep 1
 
@@ -21,7 +21,7 @@ NOLUS_WALLET=wallet
 NOLUS=nolusd
 NOLUS_ID=nolus-rila
 NOLUS_FOLDER=.nolus
-NOLUS_VER=v0.1.39
+NOLUS_VER=v0.1.43
 NOLUS_REPO=https://github.com/Nolus-Protocol/nolus-core
 NOLUS_GENESIS=https://snapshots.kjnodes.com/nolus-testnet/genesis.json
 NOLUS_ADDRBOOK=https://snapshots.kjnodes.com/nolus-testnet/addrbook.json
@@ -51,14 +51,8 @@ echo -e "NODE CHAIN ID  : \e[1m\e[31m$NOLUS_ID\e[0m"
 echo -e "NODE PORT      : \e[1m\e[31m$NOLUS_PORT\e[0m"
 echo ""
 
-# Update
-sudo apt update && sudo apt upgrade -y
-
-# Package
-sudo apt install curl tar wget clang pkg-config libssl-dev jq build-essential git make ncdu -y
-
 # Install GO
-ver="1.18.2"
+ver="1.19.6"
 cd $HOME
 rm -rf go
 wget "https://golang.org/dl/go$ver.linux-amd64.tar.gz"
@@ -96,7 +90,7 @@ sed -i.bak -e "s%^proxy_app = \"tcp://127.0.0.1:26658\"%proxy_app = \"tcp://127.
 sed -i.bak -e "s%^address = \"tcp://0.0.0.0:1317\"%address = \"tcp://0.0.0.0:${NOLUS_PORT}317\"%; s%^address = \":8080\"%address = \":${NOLUS_PORT}080\"%; s%^address = \"0.0.0.0:9090\"%address = \"0.0.0.0:${NOLUS_PORT}090\"%; s%^address = \"0.0.0.0:9091\"%address = \"0.0.0.0:${NOLUS_PORT}091\"%" $HOME/$NOLUS_FOLDER/config/app.toml
 
 # Set Config Pruning
-pruning="custom"
+pruning="nothing"
 pruning_keep_recent="100"
 pruning_keep_every="0"
 pruning_interval="19"
