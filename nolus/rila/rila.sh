@@ -12,7 +12,7 @@ echo "▒ ▒▓▒ ▒ ░▒▒ ░ ░▓ ░░ ▒░▓  ░░ ▒░   �
 echo "░ ░▒  ░ ░░░   ░▒ ░░ ░ ▒  ░░  ░      ░░ ░░   ░ ▒░  ▒ ░ ░   ░    ░ ";
 echo "░  ░  ░   ░    ░    ░ ░   ░      ░      ░   ░ ░   ░   ░ ░        ";
 echo "      ░   ░    ░      ░  ░       ░            ░     ░          ░ ";
-echo "           Auto Installer nolus-rila For NOLUS v0.1.43           ";
+echo "       Auto Installer nolus-rila For NOLUS v0.2.1-testnet        ";
 echo -e "\e[0m"
 sleep 1
 
@@ -21,7 +21,7 @@ NOLUS_WALLET=wallet
 NOLUS=nolusd
 NOLUS_ID=nolus-rila
 NOLUS_FOLDER=.nolus
-NOLUS_VER=v0.1.43
+NOLUS_VER=v0.2.1-testnet
 NOLUS_REPO=https://github.com/Nolus-Protocol/nolus-core
 NOLUS_GENESIS=https://snapshots.kjnodes.com/nolus-testnet/genesis.json
 NOLUS_ADDRBOOK=https://snapshots.kjnodes.com/nolus-testnet/addrbook.json
